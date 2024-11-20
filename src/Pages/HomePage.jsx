@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect,useState } from "react";
 import {
   XAxis,
   Tooltip,
@@ -11,6 +11,7 @@ import CaseCount from "../Components/Home/CaseCount";
 import { Link, useNavigate } from "react-router-dom";
 import BarGraph from "../Components/Home/BarGraph";
 import axios from "axios";
+import ViewCase from "./ViewCase";
 
 const HomePage = () => {
   const datas = [
@@ -76,8 +77,10 @@ const HomePage = () => {
   }
 
   const navigate = useNavigate();
+  const [caseID,setCaseID] = useState("")
 
   return (
+    <div className="flex flex-col items-center">
     <div className="flex w-screen max-md:flex-col max-md:py-10">
       <button onClick={onLogout} className="py-1 px-4 bg-red-500 hover:bg-red-400 duration-300 rounded-full max-h-fit text-white translate-x-4 translate-y-4">Logout</button>
       <div className="md:min-w-[40%] h-full  flex justify-center items-center">
@@ -100,6 +103,18 @@ const HomePage = () => {
             </button>
           </Link>
         </div>
+      </div>
+    </div>
+
+    <div className="flex flex-col justify-center items-center  my-16 gap-4 bg-white shadow-lg p-10 rounded-xl border-2">
+        <h1 className="text-lg">Get a particular case details</h1>
+        <input type="text" onChange={(e) => setCaseID(e.target.value)} className="rounded-md border-2 py-1 px-2"/>
+        <Link to={`/case/${caseID}`}>
+          <button className="px-8 py-1 bg-blue-500 text-white rounded-full">
+            search
+          </button>
+        </Link>
+       {caseID && <ViewCase/>}
       </div>
     </div>
   );

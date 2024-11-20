@@ -31,7 +31,7 @@ const Maps = (props) => {
       {allMarker.map((ele, index) => (
         <Circle
           key={`circle-${index}`}
-          radius={2500}
+          radius={1500}
           center={{
             lat: parseFloat(ele?.latitude),
             lng: parseFloat(ele?.longitude),

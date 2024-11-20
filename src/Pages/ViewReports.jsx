@@ -1,56 +1,84 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const ViewReports = () => {
   const [allReports, SetAllReports] = useState([]);
-  const [page, SetPage] = useState(1);
+  const [page, setPage] = useState(1);
+  const [filter, setFilter] = useState({
+    district : "",
+    year : "",
+    month : ""
+  });
   const [isLoading,setIsLoading] = useState(true);
 
   useEffect(() => {
     axios
       .get(
-        `${import.meta.env.VITE_BASE_URL}/getCases?page=${page}`
+        `${import.meta.env.VITE_BASE_URL}/getCases/${filter.district}?page=${page}`
       )
       .then((res) => {
         SetAllReports(res.data);
-        setIsLoading(false)
+        console.log(res.data)
+        setIsLoading(false);
       })
       .catch(err => console.log(err))
-  }, []);
+  },[page,filter]);
 
+
+  function handleClearFilter(){
+    setFilter({...filter,
+       district : "",
+       year : "",
+       month : ""
+    })
+  }
+  function onNext(){
+    setPage((page) => page+1)
+    setIsLoading(true)
+  }
+  function onPrev(){
+    setPage((page) => page-1)
+    setIsLoading(true)
+  }
   return (
     <div className="flex flex-col items-center w-screen py-10">
       <h1 className="text-xl font-bold">REPORTS</h1>
       {/*Filter sections */}
       { isLoading ? <h1 className="mt-40">Loading...</h1> : <>
-      <div className="py-5 flex md:gap-5 max-md:flex-col hidden">
+      <div className="py-5 flex md:gap-5 max-md:flex-col">
         <div className="flex items-center gap-4">
           <label>Select District</label>
-          <select title="Select District" className="border p-2">
-            <option>All</option>
+          <select title="Select District" value={filter.district} onChange={(e) =>{ setFilter({...filter,district : e.target.value}); setPage(1)}} className="border p-2 rounded-md">
+            <option value={""}>All</option>
             <option>Puducherry</option>
             <option>Karaikal</option>
             <option>Yanam</option>
             <option>Mahe</option>
+            <option>Tamil nadu</option>
           </select>
         </div>
         <div className="flex items-center gap-4">
           <label>Select Year</label>
-          <select title="Select District" className="border p-2">
-            <option>All</option>
+          <select title="Select Year" value={filter.year} onChange={(e) => setFilter({...filter,year : e.target.value})} className="border p-2 rounded-md">
+            <option value={""}>All</option>
             <option>2024</option>
           </select>
         </div>
-        <div className="flex items-center gap-4">
+        {/* only filter months when year is selected */}
+        { filter.year &&
+          <div className="flex items-center gap-4">
           <label>Select Month</label>
-          <select title="Select District" className="border p-2">
-            <option>All</option>
-            <option>October</option>
+          <select title="Select Month" value={filter.month} onChange={(e) => setFilter({...filter,month : e.target.value})} className="border p-2 rounded-md">
+            <option value={""}>All</option>
+            <option value={"october"}>October</option>
           </select>
-        </div>
-        {/*Reports */}
+        </div>}
+        {/* filter button
+        <button onClick={handleFilter} className={`text-md bg-blue-500 text-white py-2 px-3 rounded-lg hover:bg-blue-400 duration-300`} >Filter</button>
+        {(filter.district || filter.year) && <button onClick={handleClearFilter} className="shadow-xl p-2 text-red-500 rounded-full border-2">clear filter</button>} */}
       </div>
+        {/*Reports */}
       <div
         className={`${
           allReports.length > 2 ? "grid grid-cols-3 gap-10" : "flex gap-10"
@@ -72,11 +100,11 @@ const ViewReports = () => {
               </tr>
               <tr className=" items-center">
                 <td className="font-semibold text-lg">Attacker Species </td>
-                <td>:   {cases?.attacker_species}</td>
+                <td>:   {cases?.attacker_species  && "unknown"}</td>
               </tr>
               <tr className=" items-center">
                 <td className="font-semibold text-lg">Victim Species</td>
-                <td>:   {cases?.victim_species}</td>
+                <td>:   {cases?.victim_species && "unknown"}</td>
               </tr>
               <tr className=" items-center">
                 <td className="font-semibold text-lg">Attack Date </td>
@@ -93,9 +121,15 @@ const ViewReports = () => {
               </button>
             </Link>
           </div>
+          
         ))}
       </div>
       </>}
+      <div className="flex justify-center items-center gap-5 mt-10">
+        <button  onClick={onPrev} disabled={page === 1} className={`text-md bg-blue-500 text-white py-2 px-3 rounded-md ${page === 1 && "cursor-not-allowed bg-slate-200 text-blue-500"}`}>Prev</button>
+        <h4 className="text-md bg-white shadow-lg text-blue-500 py-1 px-3 rounded-full">{page}</h4>
+        <button onClick={onNext} disabled={allReports.length<15} className={`text-md bg-blue-500 text-white py-2 px-3 rounded-md ${allReports.length<15 && "cursor-not-allowed bg-slate-200 text-blue-500"}`}>Next</button>
+      </div>
     </div>
   );
 };
