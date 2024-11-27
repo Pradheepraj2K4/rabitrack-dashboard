@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
 
-const CaseCount = () => {
+const CaseCount = ({setLoading}) => {
   const [counts, setCounts] = useState([]);
   const [count1, setCount1] = useState(0);
   const [count2, setCount2] = useState(0);
@@ -15,6 +15,8 @@ const CaseCount = () => {
       .get(`${import.meta.env.VITE_BASE_URL}/getCaseCount`)
       .then((res) => {
         setCounts(res.data || []);
+        console.log(setLoading)
+        setLoading(false)
       })
       .catch((err) => {
         console.log(err);

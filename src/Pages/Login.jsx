@@ -4,18 +4,23 @@ import { useNavigate } from "react-router-dom";
 import { RiLoginCircleLine } from "react-icons/ri";
 import { IoPerson } from "react-icons/io5";
 import { FaUnlock } from "react-icons/fa";
+import Spinner from "../Components/Spinner";
 
 const Login = () => {
     const [error, setError] = useState()
     const [username ,setUsername] = useState("");
     const [password ,setPassword] = useState("");
+    const [isLoading,setIsLoading] = useState(false)
     const navigate = useNavigate();
     const onLogin = () => {
+        if(!username && !password) return setError("Please enter username and password")
+        setIsLoading(true)
         axios.post(`${import.meta.env.VITE_BASE_URL}/admin-login`, {username : username,password : password})
             .then((res) => {
-                res.data.isAuth ? setTimeout(() => navigate("/"),1000) : setError("username and password doesn't match")
+                res.data.isAuth ? navigate("/") : setError("username and password doesn't match")
+                setIsLoading(false)
             })
-            .catch(err => setError(err))
+            .catch(err => {setError(err.message + ", Please try again!"); setIsLoading(false)})
     };
     return (
         <div className="w-screen my-32 flex flex-col items-center justify-center text-xl">
@@ -30,7 +35,7 @@ const Login = () => {
                         <FaUnlock/>
                         <input onChange={e => setPassword(e.target.value)} type="password" placeholder="Enter username" className=" ring-0 border-0 outline-0" />
                     </div>
-                    <button onClick={onLogin} className="py-2 px-8 bg-blue-600 text-white rounded-full hover:bg-white hover:text-blue-500 duration-300 shadow-md">login</button>
+                    <button onClick={onLogin} className="flex justify-center items-center gap-2 py-2 px-8 bg-blue-600 text-white rounded-full hover:bg-white hover:text-blue-500 duration-300 shadow-md">{isLoading && <Spinner size={20}/>} login</button>
                     {error && <h2 className="text-sm px-4 text-red-600">*{error}</h2>}
                 </div>
             </div>
