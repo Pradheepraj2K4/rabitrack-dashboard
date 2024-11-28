@@ -22,6 +22,7 @@ const Maps = (props) => {
       google={props.google}
       style={{ width: "100%", height: "100%" }}
       zoom={10}
+      
       initialCenter={{
         lat: 11.941359,
         lng: 79.8005759,
@@ -31,7 +32,7 @@ const Maps = (props) => {
       {allMarker.map((ele, index) => (
         <Circle
           key={`circle-${index}`}
-          radius={1500}
+          radius={500}
           center={{
             lat: parseFloat(ele?.latitude),
             lng: parseFloat(ele?.longitude),

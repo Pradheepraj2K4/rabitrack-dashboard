@@ -54,24 +54,28 @@ const CaseDetails = ({id}) => {
             error ? <h2 className="text-red-500">{error}</h2> : <>
         {
           isLoading ? <Spinner/> : <>
-        <div className="flex flex-col items-center bg-white p-6 shadow-2xl border-2 shadow-black/20 rounded-2xl">
+        <div className="flex flex-col items-center bg-white p-6 shadow-2xl border-2 shadow-black/20 rounded-2xl min-h-[400px]">
           <h1 className="font-bold text-xl pb-5">Attacker Details</h1>
           <table className="border-separate border-spacing-x-5 border-spacing-y-2">
             <tr>
               <td className="font-semibold">Species</td>
-              <td>{attacker?.species}</td>
+              <td>{attacker?.species!=="null" ? (attacker?.species || "unknown") : "unknown" }</td>
             </tr>
             <tr>
               <td className="font-semibold">Age</td>
-              <td>{attacker?.age}</td>
+              <td>{attacker?.age || "unknown"}</td>
             </tr>
             <tr>
               <td className="font-semibold">Sex</td>
-              <td>{attacker?.sex === "M" ? "Male" : "Female"}</td>
+              <td>{attacker?.sex === "M" ? "Male" : attacker?.sex === 'F' ? "Female" : "unknown"}</td>
             </tr>
             <tr>
               <td className="font-semibold">Breed</td>
-              <td>{attacker?.breed}</td>
+              <td>{attacker?.breed || "unknown"}</td>
+            </tr>
+            <tr>
+              <td className="font-semibold">Is Pet?</td>
+              <td>{attacker?.is_pet ? "Yes" : "No"}</td>
             </tr>
             <tr>
               <td className="font-semibold">Vaccination status</td>
@@ -85,6 +89,13 @@ const CaseDetails = ({id}) => {
                 {attacker?.vaccination_status === 1 ? "Yes" : "No"}
               </td>
             </tr>
+            {
+            attacker?.last_vaccinated_on &&
+            <tr>
+              <td className="font-semibold">Last Vaccinated On </td>
+              <td>{attacker?.last_vaccinated_on}</td>
+            </tr>
+            }
             <tr>
               <td className="font-semibold">Attacker Status</td>
               <td
@@ -92,9 +103,9 @@ const CaseDetails = ({id}) => {
                   attacker?.attacker_status === "Dead with Rabies Signs" 
                     ? "bg-red-400"
                     :"bg-green-400"
-                } text-center rounded-lg`}
+                } text-center rounded-lg px-2`}
               >
-                {attacker?.attacker_status}
+                {attacker?.attacker_status || "unknown"}
               </td>
             </tr>
             <tr>
@@ -112,11 +123,11 @@ const CaseDetails = ({id}) => {
           <table className="border-separate border-spacing-x-5 border-spacing-y-2">
             <tr>
               <td className="font-semibold">Species</td>
-              <td>{victim?.species}</td>
+              <td>{attacker?.species!=="null" ? (attacker?.species || "unknown") : "unknown" }</td>
             </tr>
             <tr>
               <td className="font-semibold">Age</td>
-              <td>{victim?.age}</td>
+              <td>{victim?.age || "unknown"}</td>
             </tr>
             <tr>
               <td className="font-semibold">Sex</td>
@@ -124,7 +135,7 @@ const CaseDetails = ({id}) => {
             </tr>
             <tr>
               <td className="font-semibold">Breed</td>
-              <td>{victim?.breed}</td>
+              <td>{victim?.breed || "unknown"}</td>
             </tr>
             <tr>
               <td className="font-semibold">Vaccination status</td>
@@ -133,7 +144,7 @@ const CaseDetails = ({id}) => {
                   victim?.vaccination_status === "Vaccinated" ? "bg-green-400" : "bg-red-400"
                 } text-center rounded-lg`}
               >
-                {victim?.vaccination_status}
+                {victim?.vaccination_status || "unknown"}
               </td>
             </tr>
             {
@@ -149,11 +160,17 @@ const CaseDetails = ({id}) => {
             </tr>
             <tr>
               <td className="font-semibold">Wound Category</td>
-              <td>{victim?.wound_category}</td>
+              <td>{victim?.wound_category || "unknown"}</td>
+            </tr>
+            <tr>
+              <td className="font-semibold">Wound severity</td>
+              <td className={` text-center rounded-md ${victim?.wound_severity === "Mild" && "bg-green-400"} ${victim?.wound_severity === "Moderate" && "bg-orange-400"} ${victim?.wound_severity === "Severe" && "bg-red-400"}`}>
+                {victim?.wound_severity || "unknown"}
+              </td>
             </tr>
             <tr>
               <td className="font-semibold">Doses Given</td>
-              <div className="bg-slate-100 rounded-lg p-3">{doseDetails?.map(ele => <h2>{formatNumberToDay(ele.dose)} : {ele.dose_date}</h2>)}</div>
+              <div className="bg-slate-100 rounded-lg p-3">{doseDetails?.map(ele => <h2 className="font-semibold">{formatNumberToDay(ele.dose)} : {ele.dose_date}</h2>)}</div>
             </tr>
             {/* <tr>
               <td className="font-semibold">First aid status</td>
@@ -169,7 +186,7 @@ const CaseDetails = ({id}) => {
         </div>
 
         <div className="flex flex-col gap-5">
-        <div className="flex flex-col items-center bg-white p-2 shadow-2xl border-2 shadow-black/20 rounded-2xl">
+        <div className="flex flex-col items-center bg-white p-5 shadow-2xl border-2 shadow-black/20 rounded-2xl">
           <h1 className="font-bold text-xl pb-2 ">Doctor Treated</h1>
           <table className="border-separate border-spacing-x-5 border-spacing-y-2">
             <tr>
@@ -195,7 +212,7 @@ const CaseDetails = ({id}) => {
           </table>
         </div>
 
-        <div className="flex flex-col items-center bg-white p-2 shadow-2xl border-2 shadow-black/20 rounded-2xl">
+        <div className="flex flex-col items-center bg-white p-5 shadow-2xl border-2 shadow-black/20 rounded-2xl">
           <h1 className="font-bold text-xl pb-2">Owned by</h1>
           <table className="border-separate border-spacing-x-5 border-spacing-y-2">
             <tr>

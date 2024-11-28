@@ -101,7 +101,7 @@ const HomePage = () => {
               View Reports
             </button>
           </Link>
-          <Link to="map">
+          <Link to="/map">
             <button className="bg-blue-400 px-5 py-2 rounded-xl text-white">
               View Map
             </button>
@@ -111,9 +111,9 @@ const HomePage = () => {
     </div>
 
      {/* search case by ID */}
-    <div className="flex flex-col justify-center items-center min-w-[50vw] mt-24 mb-16 gap-4 bg-white shadow-lg p-10 rounded-xl border-2">
+    <div className="flex flex-col justify-center items-center min-w-[50vw] mt-24 mb-16 gap-4 bg-blue-100/30 shadow-lg p-10 rounded-xl border-2">
         <h1 className="text-lg">Get a particular case details</h1>
-        <input placeholder="Enter a case ID" type="text" onChange={(e) => setInputCaseID(e.target.value)} className="w-[80%] rounded-md border-2 py-1 px-2"/>
+        <input placeholder="Enter a case ID" type="text" onKeyDown={e => e.key === "Enter" && setCaseID(inputCaseID)} onChange={(e) => setInputCaseID(e.target.value)} className="w-[80%] rounded-md border-2 border-black/30 py-1 px-2"/>
         <button className="px-8 py-1 bg-blue-500 text-white rounded-full" onClick={() => setCaseID(inputCaseID)}>
           search
         </button>

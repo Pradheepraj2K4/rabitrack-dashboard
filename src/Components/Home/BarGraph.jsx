@@ -9,6 +9,8 @@ import {
   YAxis,
 } from "recharts";
 
+import Spinner from '../Spinner'
+
 const BarGraph = () => {
   const [counts, setCounts] = useState([
     {
@@ -93,8 +95,8 @@ const BarGraph = () => {
   // }, [allData]);
 
   return Loading ? (
-    <div className="md:min-w-full h-[100px] flex justify-center items-center">
-      Loading
+    <div className="md:min-w-full h-[400px] flex justify-center items-center">
+      <Spinner size={50}/>
     </div>
   ) : (
     <>

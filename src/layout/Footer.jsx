@@ -18,7 +18,7 @@ const Footer = () => {
           >
             AIC-PECF
           </a>{" "}
-          with Collaboration with{" "}
+          in Collaboration with{" "}
           <a
             href="https://ptu-designclub.netlify.app/"
             target="_blank"
