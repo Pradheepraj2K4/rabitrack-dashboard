@@ -23,6 +23,11 @@ const ViewReports = () => {
         SetAllReports(res.data);
         // console.log(res.data)
         setIsLoading(false);
+        window.scrollTo({
+          top: 0,
+          left: 0,
+          behavior: 'smooth' // Enables smooth scrolling
+        });
       })
       .catch(err => {
         console.log(err)

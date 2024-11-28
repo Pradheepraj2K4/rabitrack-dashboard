@@ -88,5 +88,5 @@ const Maps = (props) => {
 };
 
 export default GoogleApiWrapper({
-  apiKey: "AIzaSyB2UBcnPUI8HtyRnHjtBes1KmztvHwMhGo",
+  apiKey: import.meta.env.VITE_MAP_API,
 })(Maps);
